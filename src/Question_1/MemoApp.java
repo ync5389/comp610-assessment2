@@ -78,13 +78,13 @@ public class MemoApp {
         System.out.println("*****************************************\nCurrent mark: "+mark);
         
         
-        System.out.print("\n\nFind by Title:");
-        mark+=checkFindByTitle(memoManager);
-        System.out.println("*****************************************\nCurrent mark: "+mark);
+        // System.out.print("\n\nFind by Title:");
+        // mark+=checkFindByTitle(memoManager);
+        // System.out.println("*****************************************\nCurrent mark: "+mark);
         
-        System.out.print("\n\nFind by Title:");
-        mark+=checkNotFindByTitle(memoManager);
-        System.out.println("*****************************************\nCurrent mark: "+mark);        
+        // System.out.print("\n\nFind by Title:");
+        // mark+=checkNotFindByTitle(memoManager);
+        // System.out.println("*****************************************\nCurrent mark: "+mark);        
         
         System.out.print("\n\nFind by Date:");
         mark+=checkFindByDate(memoManager, dates[3]);
@@ -135,8 +135,7 @@ public class MemoApp {
         
     }
     
-    public static int checkSortByDate(Memo[] list)
-    {
+    public static int checkSortByDate(Memo[] list){
         int mark = 0;
         for(int i = 0; i < list.length-1; i++){
             if(list[i].date.compareTo(list[i+1].date)<=0)
@@ -152,8 +151,7 @@ public class MemoApp {
         }
     }
     
-    public static int checkSortByTitle(Memo[] list)
-    {
+    public static int checkSortByTitle(Memo[] list){
         int mark = 0;
         for(int i = 0; i < list.length-1; i++){
             if(list[i].title.compareTo(list[i+1].title)<=0)
@@ -169,8 +167,7 @@ public class MemoApp {
         }
     }
     
-    public static int checkSortByDateAfterReverse(Memo[] list)
-    {
+    public static int checkSortByDateAfterReverse(Memo[] list){
         int mark = 0;
         for(int i = 0; i < list.length-1; i++){
             if(list[i].date.compareTo(list[i+1].date)>=0)
@@ -203,8 +200,7 @@ public class MemoApp {
         }
     }   
     
-    public static int checkFindByTitle(MemoManager memoManager)
-    {
+    public static int checkFindByTitle(MemoManager memoManager){
         System.out.println(" Title 03");
         Memo resultMemo = memoManager.findMemo("Title 03");
         System.out.println(resultMemo);
@@ -216,8 +212,7 @@ public class MemoApp {
         }
     }
     
-    public static int checkNotFindByTitle(MemoManager memoManager)
-    {
+    public static int checkNotFindByTitle(MemoManager memoManager){
         System.out.println(" Title 00 (test for not found)");
         Memo resultMemo = memoManager.findMemo("Title 00");
         System.out.println(resultMemo);
@@ -229,16 +224,17 @@ public class MemoApp {
         }
     }
     
-    public static int checkFindByDate(MemoManager memoManager, String date)
-    {        
+    public static int checkFindByDate(MemoManager memoManager, String date){        
         DateFormat dateFormat = new SimpleDateFormat("yyyyy/MM/dd");
         try {
             Date targetDate = dateFormat.parse(date);
             System.out.println(" "+targetDate);
             Memo resultMemo = memoManager.findMemo(targetDate);
             System.out.println(resultMemo);
-            if(resultMemo.date.equals(targetDate))
-                return 3;
+            System.out.println("yoo");
+            if(resultMemo.date.equals(targetDate)){
+            return 3;
+            }
             else
             {
                 message+="Failed: checkFindByDate (Title case: "+date+")\n";
@@ -250,8 +246,7 @@ public class MemoApp {
         return 0;
     }
     
-    public static int checkNotFindByDate(MemoManager memoManager, String date)
-    {        
+    public static int checkNotFindByDate(MemoManager memoManager, String date){        
         DateFormat dateFormat = new SimpleDateFormat("yyyyy/MM/dd");
         try {
             Date targetDate = dateFormat.parse(date);

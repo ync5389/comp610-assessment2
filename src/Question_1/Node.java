@@ -10,10 +10,10 @@ package Question_1;
  * @author xhu
  */
 public class Node <E, F extends Comparable> implements Comparable <Node>{
-    private E element; 
-    private F key;     
-    private Node<E, F> left; 
-    private Node<E, F> right;
+    E element; 
+    F key;     
+    Node<E, F> left; 
+    Node<E, F> right;
     public Node(E element, F key) {
         this.element = element;
         this.key = key;

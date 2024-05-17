@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.tree.TreeNode;
+
 /**
  *
  * @author xhu
@@ -48,11 +50,42 @@ public class MemoManager<E extends Comparable> {
         }
     }
     
-    public Memo findMemo(E key){
-        Memo memo = new Memo();
-        
-        memo.date = (Date) bTreeDate.searchElement(key);
-        return memo;
+    public Memo findMemo(E key){        
+        // if (bTreeDate == null 
+        // || bTreeTitle == null) {
+        //     return null; 
+        // }
+        // if (bTreeTitle == null) {
+        //     return null; 
+        // }
+        Node currentNode = null;
+        if (key instanceof String) {
+            currentNode = bTreeTitle.root;
+        } else if (key instanceof Date) {
+            currentNode = bTreeDate.root;
+        }
+        // Node currentNode = bTreeTitle.root;
+        while (currentNode != null) {
+            int comparison = key.compareTo(currentNode.getKey());
+            System.out.println(comparison + "ccccc");
+            
+            if (comparison == 0) {
+                return (Memo) currentNode.getKey();
+            } else if (comparison < 0) {
+                currentNode = currentNode.getLeft();
+            } else {
+                currentNode = currentNode.getRight();
+            }
+        }
+
+
+        // Memo memo = new Memo();
+        //     // memo.date = dateFormat.parse(currentNode.date);
+        //     memo.title = (String) currentNode.key;
+        //     memo.message = (String) currentNode.element;
+        //     System.out.println(memo.title + "<<<<><>");
+        return null;
+    
     }
     
     public Memo[] getSortedMemoList(E key){        
