@@ -11,50 +11,94 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author xhu
  */
-public class BinaryTree <E, F extends Comparable> {
-    Node root; 
-    int number_of_nodes;
-    public BinaryTree(Node node){
-        this.root = node;
+public class BinaryTree <E extends Comparable<E>, Memo> {
+    public Node<Memo, E> root; 
+    int number_of_nodes = 0;
+    // public BinaryTree(Node node){
+    //     this.root = node;
+    // }
+    // public BinaryTree(Memo  element, E key){
+    //     this.root = new Node<>(element, key);
+    // }
+    // public BinaryTree(){
+    //     this.root = null; 
+    // }
+    
+    public void add(Memo element, E key){
+        root = addRecursive(root, element, key);
     }
     
-    public BinaryTree(E element, F key){
-        this.root = new Node<>(element, key);
-    }
-    
-    public BinaryTree(){
-        this.root = null; 
-    }
-    
-    public void addElement(E element, F key){
-        Node<E, F> newNode = new Node<>(element, key);
-        addNode(root, newNode);
-    }
-    
-    public void addNode(Node current, Node newNode){        
+    public Node<Memo, E> addRecursive(Node<Memo, E> current, Memo element, E key){     
         if (current == null) {
-            root = newNode; // If the tree is empty, set the new node as the root
-        } else {
-            int comparison = newNode.getKey().compareTo(current.getKey());
-            if (comparison < 0) {
-                if (current.getLeft() == null) {
-                    current.setLeft(newNode);
-                } else {
-                    addNode(current.getLeft(), newNode);
-                }
-            } else if (comparison > 0) {
-                if (current.getRight() == null) {
-                    current.setRight(newNode);
-                } else {
-                    addNode(current.getRight(), newNode);
-                }
-            }
-            // If keys are equal, decide how to handle duplicates (e.g., ignore or update)
+        number_of_nodes++;
+            System.out.println(">>>>current<<<<"+number_of_nodes );
+            System.out.println(">>>>key<<<<"+key);
+
+            return new Node<Memo, E>(element, key);
         }
+
+        int comparison = key.compareTo(current.key);
+        System.out.println(">>>comparison"+ comparison);
+
+        if (comparison < 0) {
+            System.out.println(">>>left"+ current.left);
+            current.left = addRecursive(current.left, element, key);
+        } else if (comparison > 0) {
+            System.out.println(">>>right"+ current.right);
+            current.right = addRecursive(current.right, element, key);
+        } else {
+  
+            current.element = element; 
+            return current;
+        }
+        // return current;
+        current.height = 1 + Math.max(height(current.left), height(current.right));
+        return balance(current);
+    }
+
+    public Memo search(E key) {
+        return searchRecursive(root, key);
+    }
+       
+    public Memo searchRecursive(Node<Memo, E> current, E key) {
+        if (current == null) {
+            System.out.println(">>>>current<<<<"+ number_of_nodes);
+            System.out.println(">>>>key<<<<"+key);
+
+            return null;
+        }
+        
+        int comparison = key.compareTo(current.key);
+        System.out.println(">>>comparison"+ comparison);
+
+       if (comparison < 0
+        && current.left != null) {
+            System.out.println(">>>left"+ current.left.key);
+            return searchRecursive(current.left, key);
+        } else if (comparison > 0
+        && current.right != null) {
+            System.out.println(">>>right"+ current.right.key);
+            return searchRecursive(current.right, key);
+        } else {
+            System.out.println(">>>>key<<<<"+current.element);
+            return current.element;
+        }
+
+        // int comparison = key.compareTo(current.key);
+        // System.out.println(">>>comparison"+ comparison);
+        // if (comparison == 0) {
+        //     return current.element; 
+        // } else if (comparison < 0) {
+        //     return searchRecursive(current.left, key);
+        // } else {
+        //     return searchRecursive(current.right, key);
+        // }
     }
     
+
+
     //for your debugging
-    public void traversal(Node<E, F> current) {
+    public void traversal(Node<Memo , E> current) {
         if (current != null) {
             traversal(current.getLeft());
             System.out.println(current.getElement() + " (" + current.getKey() + ")");
@@ -63,12 +107,12 @@ public class BinaryTree <E, F extends Comparable> {
     }
     
     public Node[] toSortedList(){
-        Node<E, F>[] sortedNodes = new Node[number_of_nodes]; // Initialize the array
+        Node<Memo , E>[] sortedNodes = new Node[number_of_nodes]; // Initialize the array
         toSortedList(root, sortedNodes, new AtomicInteger(0));
         return sortedNodes;
     }
     
-    private void toSortedList(Node<E, F> current, Node<E, F>[] sortedNodes, AtomicInteger index) {
+    private void toSortedList(Node<Memo , E> current, Node<Memo , E>[] sortedNodes, AtomicInteger index) {
         if (current != null) {
             toSortedList(current.getLeft(), sortedNodes, index);
             sortedNodes[index.getAndIncrement()] = current;
@@ -76,42 +120,82 @@ public class BinaryTree <E, F extends Comparable> {
         }
     }
     
-    public E searchElement(F key) {
 
-        Node<E, F> targetNode = new Node<>(null, key);
-        Node<E, F> foundNode = searchNode(root, targetNode);
-        return (foundNode != null) ? foundNode.getElement() : null;
-    }
-       
-    // public Node searchNode(Node root, Node node){
-    //     return null;
-    // }
-    private Node<E, F> searchNode(Node current, Node target) {
-        if (current == null) {
-            return null; 
-        }
-        int comparison = target.getKey().compareTo(current.getKey());
-        if (comparison == 0) {
-            return current; 
-        } else if (comparison < 0) {
-            return searchNode(current.getLeft(), target);
-        } else {
-            return searchNode(current.getRight(), target);
-        }
-    }
-    
+
+
     public void reverseOrder(){
-        reverseOrder(root);
+        reverseOrderRecursive(root);
     }
-    
-    // private void reverseOrder(Node root){
-    // }
-    private void reverseOrder(Node<E, F> current) {
+
+    private void reverseOrderRecursive(Node<Memo , E> current) {
         if (current != null) {
-            reverseOrder(current.getRight());
-            System.out.println(current.getElement() + " (" + current.getKey() + ")");
-            reverseOrder(current.getLeft());
+            Node<Memo, E> temp = current.left;
+            current.left = current.right;
+            current.right = temp;
+
+            reverseOrderRecursive(current.right);
+            reverseOrderRecursive(current.left);
         }
     }
-       
+
+
+
+
+    private int height(Node<Memo, E> node) {
+        if (node == null) return 0;
+        return node.height;
+    }
+
+    private int getBalanceFactor(Node<Memo, E> node) {
+        if (node == null) return 0;
+        return height(node.left) - height(node.right);
+    }
+
+    private Node<Memo, E> balance(Node<Memo, E> node) {
+        int balanceFactor = getBalanceFactor(node);
+
+        if (balanceFactor > 1) {
+            if (getBalanceFactor(node.left) >= 0) {
+                node = rotateRight(node);
+            } else {
+                node.left = rotateLeft(node.left);
+                node = rotateRight(node);
+            }
+        } else if (balanceFactor < -1) {
+            if (getBalanceFactor(node.right) <= 0) {
+                node = rotateLeft(node);
+            } else {
+                node.right = rotateRight(node.right);
+                node = rotateLeft(node);
+            }
+        }
+
+        return node;
+    }
+
+    private Node<Memo, E> rotateLeft(Node<Memo, E> node) {
+        Node<Memo, E> x = node.right;
+        Node<Memo, E> T2 = x.left;
+
+        x.left = node;
+        node.right = T2;
+
+        node.height = Math.max(height(node.left), height(node.right)) + 1;
+        x.height = Math.max(height(x.left), height(x.right)) + 1;
+
+        return x;
+    }
+
+    private Node<Memo, E> rotateRight(Node<Memo, E> y) {
+        Node<Memo, E> x = y.left;
+        Node<Memo, E> T2 = x.right;
+
+        x.right = y;
+        y.left = T2;
+
+        y.height = Math.max(height(y.left), height(y.right)) + 1;
+        x.height = Math.max(height(x.left), height(x.right)) + 1;
+
+        return x;
+    }
 }

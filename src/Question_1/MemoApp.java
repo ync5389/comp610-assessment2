@@ -50,7 +50,11 @@ public class MemoApp {
             int day = (int)(Math.round(Math.random()*29)+1);
             String date = "2023/"+month+"/"+day;
                        
-            memoManager.addMemo(date, "Title "+(titleIndexList[i] < 10 ? "0"+ titleIndexList[i]:titleIndexList[i]), "message "+i);
+            memoManager.addMemo(
+            date,
+            "Title "+(titleIndexList[i] < 10 ? "0"+ titleIndexList[i]:titleIndexList[i]),
+            "message "+i
+            );
                         
             dates[i] = date;
         }
@@ -78,13 +82,13 @@ public class MemoApp {
         System.out.println("*****************************************\nCurrent mark: "+mark);
         
         
-        // System.out.print("\n\nFind by Title:");
-        // mark+=checkFindByTitle(memoManager);
-        // System.out.println("*****************************************\nCurrent mark: "+mark);
+        System.out.print("\n\nFind by Title:");
+        mark+=checkFindByTitle(memoManager);
+        System.out.println("*****************************************\nCurrent mark: "+mark);
         
-        // System.out.print("\n\nFind by Title:");
-        // mark+=checkNotFindByTitle(memoManager);
-        // System.out.println("*****************************************\nCurrent mark: "+mark);        
+        System.out.print("\n\nFind by Title:");
+        mark+=checkNotFindByTitle(memoManager);
+        System.out.println("*****************************************\nCurrent mark: "+mark);        
         
         System.out.print("\n\nFind by Date:");
         mark+=checkFindByDate(memoManager, dates[3]);
@@ -95,10 +99,17 @@ public class MemoApp {
         System.out.println("*****************************************\nCurrent mark: "+mark);
    
         
+
+
+
         memoManager.reverseOrder();
+
+
+
+        
         
         System.out.println("\n\nSorted by Date after reverse:");
-        memoList = memoManager.getSortedMemoList(new Date());
+        memoList = memoManager.getSortedMemoListReverse(new Date());
         for(int i = 0; i < memoList.length; i++){
             System.out.println(memoList[i]+"\n");
         }
@@ -106,7 +117,7 @@ public class MemoApp {
         System.out.println("*****************************************\nCurrent mark: "+mark);
         
         System.out.println("\n\nSorted by Title after reverse:");
-        memoList = memoManager.getSortedMemoList(new String());
+        memoList = memoManager.getSortedMemoListReverse(new String());
         for(int i = 0; i < memoList.length; i++){
             System.out.println(memoList[i]+"\n");
         }
@@ -140,6 +151,7 @@ public class MemoApp {
         for(int i = 0; i < list.length-1; i++){
             if(list[i].date.compareTo(list[i+1].date)<=0)
                 mark++;
+                System.out.println(">>>mark<<<" + mark);
         }
         
         if(mark == 9){
@@ -156,6 +168,7 @@ public class MemoApp {
         for(int i = 0; i < list.length-1; i++){
             if(list[i].title.compareTo(list[i+1].title)<=0)
                 mark++;
+                System.out.println(">>>mark<<<" + mark);
         }
         
         if(mark == 9){
@@ -170,8 +183,10 @@ public class MemoApp {
     public static int checkSortByDateAfterReverse(Memo[] list){
         int mark = 0;
         for(int i = 0; i < list.length-1; i++){
-            if(list[i].date.compareTo(list[i+1].date)>=0)
+            if(list[i].date.compareTo(list[i+1].date)>=0){
                 mark++;
+                System.out.println(">>>mark<<<" + mark);
+            }
         }
         
         if(mark == 9){
@@ -183,12 +198,13 @@ public class MemoApp {
         }
     }
     
-    public static int checkSortByTitleAfterReverse(Memo[] list)
-    {
+    public static int checkSortByTitleAfterReverse(Memo[] list){
         int mark = 0;
         for(int i = 0; i < list.length-1; i++){
-            if(list[i].title.compareTo(list[i+1].title)>=0)
+            if(list[i].title.compareTo(list[i+1].title)>=0){
                 mark++;
+                System.out.println(">>>mark<<<" + mark);
+            }
         }
         
         if(mark == 9){
@@ -204,9 +220,10 @@ public class MemoApp {
         System.out.println(" Title 03");
         Memo resultMemo = memoManager.findMemo("Title 03");
         System.out.println(resultMemo);
-        if(resultMemo.title.equals("Title 03"))
+        if(resultMemo.title.equals("Title 03")){
+            System.out.println(">>>mark<<<");
             return 3;
-        else{
+        }else{
             message+="Failed: checkFindByTitle (Title case: Title 03)\n";
             return 0;
         }
@@ -216,8 +233,11 @@ public class MemoApp {
         System.out.println(" Title 00 (test for not found)");
         Memo resultMemo = memoManager.findMemo("Title 00");
         System.out.println(resultMemo);
-        if(resultMemo==null)
+        if(!resultMemo.date.equals("Title 00")){
+        // if(resultMemo == null){
+            System.out.println(">>>mark<<<");   
             return 3;
+        }
         else{
             message+="Failed: checkNotFindByTitle (Title case: Title 00)\n";
             return 0;
@@ -231,9 +251,9 @@ public class MemoApp {
             System.out.println(" "+targetDate);
             Memo resultMemo = memoManager.findMemo(targetDate);
             System.out.println(resultMemo);
-            System.out.println("yoo");
             if(resultMemo.date.equals(targetDate)){
-            return 3;
+                System.out.println(">>>mark<<<");
+                return 3;
             }
             else
             {
@@ -253,8 +273,11 @@ public class MemoApp {
             System.out.println(" "+targetDate + "(test for not found)");
             Memo resultMemo = memoManager.findMemo(targetDate);
             System.out.println(resultMemo);
-            if(resultMemo==null)
+            if(!resultMemo.date.equals(targetDate)){
+            // if(resultMemo == null){
+                System.out.println(">>>mark<<<");
                 return 3;
+            }
             else
             {
                 message+="Failed: checkNotFindByDate (Title case: "+date+")\n";

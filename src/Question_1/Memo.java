@@ -15,10 +15,12 @@ public class Memo {
     Date date;
     String title;
     String message;
-    // Memo(String title, String message){
-    //     this.date = date;
+    Memo(Date date, String title, String message){
+        this.date = date;
+        this.title = title;
+        this.message = message;
 
-    // }
+    }
     
     public String toString() {
         return date.toString()+"\n"+title+"\n"+message;

@@ -9,16 +9,18 @@ package Question_1;
  *
  * @author xhu
  */
-public class Node <E, F extends Comparable> implements Comparable <Node>{
-    E element; 
-    F key;     
-    Node<E, F> left; 
-    Node<E, F> right;
-    public Node(E element, F key) {
+public class Node <Memo, E extends Comparable<E>> implements Comparable <Node <Memo, E>>{
+    Memo element; 
+    E  key;     
+    Node<Memo, E> left; 
+    Node<Memo, E> right;
+    int height; 
+    public Node(Memo element, E  key) {
         this.element = element;
         this.key = key;
         this.left = null;
         this.right = null;
+        this.height = 1;
     }
 
 
@@ -28,23 +30,22 @@ public class Node <E, F extends Comparable> implements Comparable <Node>{
     // }
 
     @Override
-    public int compareTo(Node other) {
-        // Compare nodes based on their keys
+    public int compareTo(Node<Memo, E> other) {
         return this.key.compareTo(other.key);
     }
-    public E getElement() {
+    public Memo getElement() {
         return element;
     }
 
-    public F getKey() {
+    public E  getKey() {
         return key;
     }
 
-    public Node<E, F> getLeft() {
+    public Node<Memo, E> getLeft() {
         return left;
     }
 
-    public Node<E, F> getRight() {
+    public Node<Memo, E> getRight() {
         return right;
     }
 
