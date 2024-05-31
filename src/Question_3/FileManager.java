@@ -20,13 +20,11 @@ public class FileManager {
     public String[] lineData;
     public String data="";
     
-    public FileManager()
-    {
+    public FileManager(){
         numberOfLines = 0;
     }        
     
-    public FileManager(String fileName)
-    {
+    public FileManager(String fileName){
         this.name = fileName;
         numberOfLines = 0;
         File f = new File(name);
@@ -46,8 +44,7 @@ public class FileManager {
         }
         lineData = new String[numberOfLines];
     }
-     public void readFile(String fileName)
-    {
+     public void readFile(String fileName){
         File f;
         if(fileName == null)
             f = new File(this.name);
@@ -74,8 +71,7 @@ public class FileManager {
         }
     }
     
-    public void writeFile(String fileName, String c)
-    {
+    public void writeFile(String fileName, String c){
         File f;
         
         if(fileName == null)
