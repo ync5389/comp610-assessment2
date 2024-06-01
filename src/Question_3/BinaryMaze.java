@@ -20,7 +20,7 @@ public class BinaryMaze {
         // TODO code application logic here
         JFrame frame = new JFrame("Maze");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Panel panel = new Panel();
+        Panel panel = new Panel(frame);
         frame.add(panel);
         frame.setSize(700, 600);
         frame.setVisible(true);
